@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { getProductsByCategory } from "@/lib/products"
 
-// Mock product data for different categories
-const productData: Record<string, any[]> = {
+// Fallback product data for different categories (used if file system has no data)
+const fallbackProductData: Record<string, any[]> = {
   earphones: [
     {
       id: 1,
@@ -24,41 +25,41 @@ const productData: Record<string, any[]> = {
     },
     {
       id: 2,
-      name: "Apple AirPods Pro (2nd Generation)",
-      originalPrice: 249.99,
-      salePrice: 199.99,
-      discount: 20,
-      rating: 4.7,
-      reviews: 28350,
-      image: "/placeholder.svg?height=300&width=300",
-      affiliateLink: "https://amazon.com/dp/B0BDHWDR12?tag=vineetmankani-21",
-      features: ["Active Noise Cancellation", "Spatial Audio", "MagSafe Charging"],
+      name: "Nobero Mockneck Sweatshirts for Man Stylish | 280 GSM Rich Cotton Fleece Regular Fit Full Sleeve Sweatshirt for Men | Stylish Casual Wear Winter Sweatshirt for Men",
+      originalPrice: 0,
+      salePrice: 0,
+      discount: 0,
+      rating: 0,
+      reviews: 0,
+      image: "https://m.media-amazon.com/images/I/611D8xiBX3L._SX679_.jpg",
+      affiliateLink: "https://amzn.to/3KvQzZF",
+      features: [""],
       badge: "Limited Time",
     },
     {
       id: 3,
-      name: "Bose QuietComfort 45 Bluetooth Headphones",
-      originalPrice: 329.99,
-      salePrice: 249.99,
-      discount: 24,
-      rating: 4.6,
-      reviews: 12890,
-      image: "/placeholder.svg?height=300&width=300",
-      affiliateLink: "https://amazon.com/dp/B098FKXT8L?tag=vineetmankani-21",
-      features: ["22hr Battery", "TriPort Technology", "Adjustable EQ"],
+      name: "Lymio Jackets || Jacket for men || Lightweight Outwear Jacket (J-10-11)",
+      originalPrice: 0.0,
+      salePrice: 0.0,
+      discount: 0,
+      rating: 0.0,
+      reviews: 0,
+      image: "https://m.media-amazon.com/images/I/71sB8bOhSmL._SY741_.jpg",
+      affiliateLink: "https://amzn.to/4rRONTr",
+      features: [""],
       badge: "Editor's Choice",
     },
     {
       id: 4,
-      name: "Sennheiser Momentum 4 Wireless",
-      originalPrice: 379.99,
-      salePrice: 279.99,
-      discount: 26,
-      rating: 4.5,
-      reviews: 8760,
-      image: "/placeholder.svg?height=300&width=300",
-      affiliateLink: "https://amazon.com/dp/B0B1N7DPQX?tag=vineetmankani-21",
-      features: ["60hr Battery", "Adaptive Noise Cancellation", "Smart Control App"],
+      name: "Kratos K9 Selfie Stick Tripod With Light, 67 inch /170CM Reinforced Tripod for Mobile Phone, Multi-Functional Bluetooth Long Selfie Stick",
+      originalPrice: 0,
+      salePrice: 0,
+      discount: 0,
+      rating: 0,
+      reviews: 0,
+      image: "https://m.media-amazon.com/images/I/617qw0QPA8L._SX679_.jpg",
+      affiliateLink: "https://amzn.to/4j2zraM",
+      features: [""],
       badge: "Premium",
     },
     {
@@ -274,6 +275,9 @@ const productData: Record<string, any[]> = {
   ],
 }
 
+// Keep the old data as fallback
+const productData = fallbackProductData
+
 // Category information
 const categoryInfo: Record<string, { name: string; description: string }> = {
   earphones: {
@@ -326,7 +330,15 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = params
-  const products = productData[slug] || productData.earphones // Fallback to earphones
+  
+  // Try to get products from file system, fallback to hardcoded data
+  let products = getProductsByCategory(slug)
+  
+  // If no products found in file system, use fallback data
+  if (products.length === 0) {
+    products = fallbackProductData[slug] || fallbackProductData.earphones || []
+  }
+  
   const category = categoryInfo[slug] || categoryInfo.earphones
 
   return (
