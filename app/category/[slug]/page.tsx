@@ -32,7 +32,7 @@ const fallbackProductData: Record<string, any[]> = {
       rating: 0,
       reviews: 0,
       image: "https://m.media-amazon.com/images/I/611D8xiBX3L._SX679_.jpg",
-      affiliateLink: "https://amzn.to/3KvQzZF",
+      affiliateLink: "https://amzn.to/48Fs9pG",
       features: [""],
       badge: "Limited Time",
     },
